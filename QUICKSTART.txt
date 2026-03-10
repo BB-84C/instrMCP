@@ -1,0 +1,98 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                  InstrMCP + qdevBot - QUICK START GUIDE                    ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+✅ INSTALLATION COMPLETE
+
+InstrMCP v2.3.5 has been successfully configured for Claude Code (qdevBot).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📁 FILES CREATED:
+
+  Configuration:
+    • C:/Users/Administrator/.qdevbot/config/instrmcp.json
+    • C:/Users/Administrator/.qdevbot/config/mcp.json
+  
+  Startup Files:
+    • D:/instrMCP/start_jupyter_mcp.bat      (Windows batch file)
+    • D:/instrMCP/start_jupyter_mcp.py       (Python launcher)
+    • D:/instrMCP/instrMCP_startup.ipynb     (Jupyter notebook)
+  
+  Documentation:
+    • D:/instrMCP/QDEVBOT_SETUP.md           (Detailed setup guide)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 HOW TO START (Choose one method):
+
+  METHOD 1 - Double-click (Easiest):
+    1. Navigate to: D:\instrMCP
+    2. Double-click: start_jupyter_mcp.bat
+    3. Jupyter Lab will open in your browser
+    4. Open: instrMCP_startup.ipynb
+    5. Run all cells (Cell → Run All)
+
+  METHOD 2 - Command line:
+    > cd D:\instrMCP
+    > python start_jupyter_mcp.py
+
+  METHOD 3 - Manual:
+    > cd D:\instrMCP
+    > jupyter lab
+    Then open instrMCP_startup.ipynb and run all cells
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ VERIFICATION:
+
+  1. Check MCP server is running:
+     > curl http://127.0.0.1:8123/health
+     Expected: {"status":"ok"}
+
+  2. In Claude Code, type:
+     /mcp
+     You should see: instrMCP
+
+  3. Test with Claude Code:
+     "What MCP tools are available?"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 WHAT HAPPENS WHEN YOU START:
+
+  1. Jupyter Lab opens in your browser
+  2. Open instrMCP_startup.ipynb
+  3. Run cells to:
+     ✓ Load instrMCP extension
+     ✓ Start MCP server (port 8123)
+     ✓ Check status
+     ✓ Enable unsafe mode (for measurements)
+     ✓ (Optional) Enable MeasureIt & Database
+
+  4. Keep Jupyter Lab running while using Claude Code
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 TIPS:
+
+  • Keep the Jupyter Lab tab open while using Claude Code
+  • The MCP server runs inside the Jupyter kernel
+  • Use %mcp_status to check server health
+  • Enable unsafe mode for full functionality
+  • Check QDEVBOT_SETUP.md for detailed docs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 NEXT STEPS:
+
+  1. Start Jupyter Lab (use one of the methods above)
+  2. Run all cells in instrMCP_startup.ipynb
+  3. Verify with: curl http://127.0.0.1:8123/health
+  4. Open Claude Code and type: /mcp
+  5. Start measuring! 🔬
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Need help? Check D:\instrMCP\QDEVBOT_SETUP.md
+

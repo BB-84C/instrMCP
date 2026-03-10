@@ -1,0 +1,105 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║            InstrMCP Architecture: Client → Server Flow                    ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 1. USER (You)                                                           │
+│    "Measure pinch-off on QPC1"                                          │
+└────────────────────────────────┬────────────────────────────────────────┘
+                                 ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 2. CLAUDE CODE (qdevBot / Me)                                           │
+│    ┌─────────────────────────────────────────────────────────────────┐  │
+│    │ Instrmcp_tool (Client Proxy)                                    │  │
+│    │ • Tool in my context window                                     │  │
+│    │ • Operations: status, search, describe, call, resources         │  │
+│    │ • Sends: { tool: "qcodes_get_parameter", args: {...} }         │  │
+│    └─────────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────┬────────────────────────────────────────┘
+                                 ↓ (STDIO Transport)
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 3. STDIO PROXY (claude_launcher.py)                                     │
+│    Location: D:/instrMCP/agentsetting/claudedesktopsetting/             │
+│    • Converts STDIO ↔ HTTP                                              │
+│    • Connects Claude Code to HTTP server                                │
+│    • Configured in: C:/Users/Administrator/.qdevbot/config/mcp.json     │
+└────────────────────────────────┬────────────────────────────────────────┘
+                                 ↓ (HTTP: 127.0.0.1:8123)
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 4. INSTRMCP MCP SERVER (What we configured)                             │
+│    Running inside: Jupyter Lab (IPython kernel)                         │
+│    Port: 8123                                                            │
+│    ┌─────────────────────────────────────────────────────────────────┐  │
+│    │ MCP Server Components:                                          │  │
+│    │ • QCoDeS integration (instruments, parameters)                  │  │
+│    │ • Notebook control (cells, variables, execution)                │  │
+│    │ • MeasureIt sweeps (1D, 2D, measurements)                       │  │
+│    │ • Database (experiments, datasets)                              │  │
+│    │ • Dynamic tools (runtime tool registration)                     │  │
+│    └─────────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────┬────────────────────────────────────────┘
+                                 ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 5. QCODES & INSTRUMENTS                                                 │
+│    • QCoDeS Station (loaded instruments)                                │
+│    • Instrument drivers (DACs, lock-ins, DMMs, etc.)                    │
+│    • Physical hardware in the lab                                       │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+KEY DIFFERENCES:
+
+┌────────────────────────┬──────────────────┬──────────────────────────┐
+│ Component              │ Instrmcp_tool    │ instrMCP MCP Server      │
+├────────────────────────┼──────────────────┼──────────────────────────┤
+│ What is it?            │ Client proxy     │ Actual server            │
+│ Where does it run?     │ Claude Code      │ Jupyter Lab kernel       │
+│ What does it do?       │ Sends requests   │ Controls instruments     │
+│ Can it measure?        │ No (just talks)  │ Yes (real hardware)      │
+│ Configuration file     │ mcp.json         │ Station config files     │
+│ Current status         │ Active (in me)   │ Not running yet          │
+│ How to start?          │ Already running  │ Run Jupyter notebook     │
+└────────────────────────┴──────────────────┴──────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════
+
+ANALOGY:
+
+Think of it like a phone call:
+
+• Instrmcp_tool = Your phone (lets you make calls, but isn't the person)
+• claude_launcher.py = Phone network (connects the call)
+• instrMCP Server = The expert on the other end (who does the actual work)
+• QCoDeS/Instruments = The lab equipment the expert controls
+
+Right now:
+✅ Your phone works (Instrmcp_tool is ready)
+✅ The network is configured (claude_launcher.py setup complete)
+❌ The expert hasn't picked up yet (instrMCP server not running)
+
+═══════════════════════════════════════════════════════════════════════════
+
+WHY THIS ERROR?
+
+When I call Instrmcp_tool({ status: true }), I get:
+  "error": "instrMCP not configured..."
+
+This happens because:
+  1. I (Instrmcp_tool) try to connect to the server
+  2. The proxy (claude_launcher.py) tries http://127.0.0.1:8123
+  3. Nothing is listening on that port (Jupyter not started)
+  4. Connection fails → "not configured" error
+
+═══════════════════════════════════════════════════════════════════════════
+
+TO FIX:
+
+1. Start Jupyter Lab:  cd D:\instrMCP && start_jupyter_mcp.bat
+2. Run startup cells:  %load_ext instrmcp.extensions → %mcp_start
+3. Server starts:      Listening on http://127.0.0.1:8123
+4. Test connection:    curl http://127.0.0.1:8123/health
+5. I can now connect:  Instrmcp_tool works! 🎉
+
+═══════════════════════════════════════════════════════════════════════════
